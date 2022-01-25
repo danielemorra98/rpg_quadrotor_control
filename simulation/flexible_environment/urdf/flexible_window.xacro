@@ -2,29 +2,38 @@
 
 <robot name="window_environment" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+	<xacro:arg name="mass" default="1"/>
+
   <!-- Used for fixing robot to Gazebo 'base_link' -->
   <link name="world"/>
 
-	<joint name="window_hinge_1" type="revolute">
+	<joint name="window_hinge_1" type="continuous">
     <parent link="world"/>
     <child link="window_1"/>
-    <origin xyz="0 0.225 1.125"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="15.0" lower="-1.57" upper="1.57" velocity="1"/>
+    <origin xyz="0 0 1"/>
+    <axis xyz="1 0 0"/>
+		<!-- <limit effort="10.0" velocity="10.0" /> -->
   </joint>
 
   <link name="window_1">
      <inertial>
-      <origin xyz="0 0.2 1.125"/> 
-      <mass value="5.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+      <origin xyz="0 0.5 1"/> 
+      <mass value="$(arg mass)" />
+      <inertia  ixx="${$(arg mass)*1/12/1.01}" ixy="0.0"  ixz="0.0"  iyy="${$(arg mass)*1/12/1.01}"  iyz="0.0"  izz="${$(arg mass)*1/6}" />
     </inertial>
     <visual>
-      <origin xyz="0 0.2 1.125" rpy="0 0 1.57" />
+      <origin xyz="0 0.5 0.05" rpy="0 0 0" />
       <geometry>
-        <box size="0.4 .1 2.2"/>
+        <box size="1.0 1.0 0.1"/>
       </geometry>
     </visual>
+		<collision>
+      <origin xyz="0 0.5 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="1.0 1.0 0.1"/>
+      </geometry>
+			
+		</collision>
   </link>
 
 

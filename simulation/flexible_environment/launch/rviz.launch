@@ -4,5 +4,5 @@
 <param name="use_gui" value="$(arg gui)"/>
 <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-<node name="rviz" pkg="rviz" type="rviz" args="urdf_tutorial display.launch model:=$(find flexible_environment)/urdf/flexible_window.xacro" required="true" />
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find flexible_environment)/rviz/default_config.rviz" required="true" />
 </launch>
