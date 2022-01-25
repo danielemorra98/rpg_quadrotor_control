@@ -1,0 +1,3 @@
+[submodule "simulation/gazebo_joint_torsional_spring_plugin"]
+	path = simulation/gazebo_joint_torsional_spring_plugin
+	url = git@github.com:aminsung/gazebo_joint_torsional_spring_plugin.git
