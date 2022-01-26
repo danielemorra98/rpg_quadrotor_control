@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <plugin name="joint_torsional_spring" filename="libjoint_torsional_spring_plugin.so">
+      <kx>${stiffness}</kx>
+      <set_point>0</set_point>
+      <joint>hinge_${number}</joint>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="window_${number}">
+    <gravity>0</gravity>
+    <material>Gazebo/Black</material>
+  </gazebo>
+</robot>

@@ -1,40 +1,56 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<robot name="window_environment" xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<xacro:arg name="mass" default="0.1"/>
+  <xacro:arg name="stiffness" default="0.2"/>
+  <xacro:arg name="damping" default="0.03"/>
+  <xacro:property name="offset" value="3"/>
+	<xacro:property name="length" value="2"/>
+	<xacro:property name="width" value="2"/>
+  <xacro:property name="height" value="0.1"/>
+  <xacro:property name="space_between" value="${0.2+width}"/>
+	<xacro:property name="upper_limit" value="90"/>
+	<xacro:property name="lower_limit" value="-270"/>
+  <xacro:property name="mass" value="$(arg mass)"/>
+  <xacro:property name="friction" default="${mass*0.01}"/>
+	<xacro:property name="stiffness" default="$(arg stiffness)"/>
+  <xacro:property name="damping" default="$(arg damping)"/>
 
-	<xacro:arg name="mass" default="1"/>
+  <xacro:macro name="window" params="number">
+    <link name="window_${number}">
+      <inertial>
+        <origin xyz="0 ${width/2} 0"/> 
+        <mass value="${mass}" />
+        <inertia  ixx="${1/12*mass*(height**2+width**2)+1/4*mass*length**2}" ixy="0.0"  ixz="0.0"  
+                  iyy="${1/12*mass*(height**2+length**2)}"  iyz="0.0"  izz="${1/12*mass*(width**2+length**2)}" />
+      </inertial>
+      <visual>
+        <origin xyz="0 ${width/2} 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 ${width/2} 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
+    </link>
 
-  <!-- Used for fixing robot to Gazebo 'base_link' -->
-  <link name="world"/>
+    <joint name="hinge_${number}" type="revolute">
+      <parent link="world"/>
+      <child link="window_${number}"/>
+      <dynamics damping="${damping}" friction="${friction}" />
+      <origin xyz="0 0 ${offset+(number-1)*space_between}"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="${lower_limit*pi/180}" upper="${upper_limit*pi/180}" effort="1000.0" velocity="100.0"/>
+    </joint>
 
-	<joint name="window_hinge_1" type="continuous">
-    <parent link="world"/>
-    <child link="window_1"/>
-    <origin xyz="0 0 1"/>
-    <axis xyz="1 0 0"/>
-		<!-- <limit effort="10.0" velocity="10.0" /> -->
-  </joint>
+    <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+    <xacro:include filename="$(find flexible_environment)/urdf/flexible_window.gazebo"/>
 
-  <link name="window_1">
-     <inertial>
-      <origin xyz="0 0.5 1"/> 
-      <mass value="$(arg mass)" />
-      <inertia  ixx="${$(arg mass)*1/12/1.01}" ixy="0.0"  ixz="0.0"  iyy="${$(arg mass)*1/12/1.01}"  iyz="0.0"  izz="${$(arg mass)*1/6}" />
-    </inertial>
-    <visual>
-      <origin xyz="0 0.5 0.05" rpy="0 0 0" />
-      <geometry>
-        <box size="1.0 1.0 0.1"/>
-      </geometry>
-    </visual>
-		<collision>
-      <origin xyz="0 0.5 0.05" rpy="0 0 0" />
-      <geometry>
-        <box size="1.0 1.0 0.1"/>
-      </geometry>
-			
-		</collision>
-  </link>
+  </xacro:macro>
 
 
 </robot>

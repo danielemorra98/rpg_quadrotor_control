@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot name="flexible_environment" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <link name="world"/>
+  <!-- Import the xacro model of the window -->
+  <xacro:include filename="$(find flexible_environment)/urdf/flexible_window.xacro" />
+
+  <!-- Creating the xacro loop to generate n windows -->
+  <xacro:macro name="loop" params="number_windows">
+    <xacro:window number="${number_windows}"/>
+    <xacro:if value="${number_windows-1}">
+      <xacro:loop number_windows="${number_windows-1}"/>
+    </xacro:if>
+  </xacro:macro>
+
+  <!-- Generate the windows -->
+  <xacro:loop number_windows="5"/>
+
+</robot>
