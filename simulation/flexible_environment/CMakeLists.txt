@@ -4,12 +4,6 @@ project(flexible_environment)
 find_package(catkin REQUIRED COMPONENTS
   eigen_catkin
   gazebo_joint_torsional_spring
-  mav_msgs
-  nav_msgs
-  quadrotor_common
-  quadrotor_msgs
-  roscpp
-  std_srvs
   roslaunch
 )
 
